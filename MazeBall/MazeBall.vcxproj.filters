@@ -7,7 +7,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-	<None Include="game.config" />
+    <None Include="game.config" />
     <None Include="icon.png" />
     <None Include="bar-descriptor.xml" />
     <None Include="res\box.dae">
@@ -25,14 +25,21 @@
     <None Include="res\colored.vert">
       <Filter>res</Filter>
     </None>
+    <None Include="MazeBall.props" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\MazeBallMain.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\LeapManager.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\MazeBallMain.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LeapManager.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

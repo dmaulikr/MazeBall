@@ -1,5 +1,4 @@
 #include "MazeBallMain.h"
-#include "Leap.h"
 
 // Declare our game instance
 MazeBallMain game;

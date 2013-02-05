@@ -9,7 +9,12 @@
 #ifndef __MazeBall__LeapManager__
 #define __MazeBall__LeapManager__
 
+
+#ifdef _WIN32
+#include "../../Leap_SDK_win/include/Leap.h"
+#else
 #include "Leap.h"
+#endif
 
 class LeapManager : public Leap::Listener
 {
