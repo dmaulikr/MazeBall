@@ -160,7 +160,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Leapd.lib;lua.lib;OpenAL32.lib;OpenGL32.lib;GLU32.lib;glew32.lib;libpng14.lib;zlib.lib;gameplay.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;BulletDynamics.lib;BulletCollision.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Leap.lib;lua.lib;OpenAL32.lib;OpenGL32.lib;GLU32.lib;glew32.lib;libpng14.lib;zlib.lib;gameplay.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;BulletDynamics.lib;BulletCollision.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>../../GamePlay/external-deps/lua/lib/windows/x86;../../GamePlay/external-deps/bullet/lib/windows/x86;../../GamePlay/external-deps/openal/lib/windows/x86;../../GamePlay/external-deps/oggvorbis/lib/windows/x86;../../GamePlay/external-deps/glew/lib/windows/x86;../../GamePlay/external-deps/libpng/lib/windows/x86;../../GamePlay/external-deps/zlib/lib/windows/x86;../../GamePlay/gameplay/windows/x86/$(Configuration);$(LeapDir)/lib/x86</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>

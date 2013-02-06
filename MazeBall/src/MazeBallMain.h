@@ -20,6 +20,9 @@ protected:
 private:
   bool drawScene(Node* node);
   Scene* _scene;
+
+  Font* mTitleFont;
+
   LeapManager leap; // The one and only instance of the leap manager.
 };
 
