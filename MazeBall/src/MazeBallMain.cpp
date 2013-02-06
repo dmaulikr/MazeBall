@@ -5,7 +5,8 @@ MazeBallMain game;
 
 MazeBallMain::MazeBallMain()
   : _scene(NULL), 
-  mTitleFont(NULL)
+  mMainMenu(NULL),
+  mOverlay(NULL)
 {
 
 }
@@ -32,20 +33,31 @@ void MazeBallMain::initialize()
   boxMaterial->getParameter("u_lightColor")->setValue(light->getColor());
   boxMaterial->getParameter("u_lightDirection")->setValue(lightNode->getForwardVectorView());
 
-  mTitleFont = Font::create("res/font/verdana_28.gpb");
+  mMainMenu = new MainMenu(this);
+  mOverlay = new LeapOverlay();
 }
 
 void MazeBallMain::finalize()
 {
   SAFE_RELEASE(_scene);
-  SAFE_RELEASE(mTitleFont);
+  SAFE_DELETE(mMainMenu);
+  SAFE_DELETE(mOverlay);
 }
 
 void MazeBallMain::update(float elapsedTime)
 {
   leap.update();
-  // Rotate model
-  //_scene->findNode("box")->translate(leap.translationX() * 0.1f, leap.translationY() * 0.1f, leap.translationZ() * 0.1f);
+
+  if(mMainMenu)
+  {
+    mMainMenu->update(elapsedTime);
+  }
+
+  if(mOverlay)
+  {
+    mOverlay->update(elapsedTime);
+  }
+
   _scene->findNode("box")->rotateY(MATH_DEG_TO_RAD((float)elapsedTime / 1000.0f * 180.0f));
 }
 
@@ -54,14 +66,17 @@ void MazeBallMain::render(float elapsedTime)
   // Clear the color and depth buffers
   clear(CLEAR_COLOR_DEPTH, Vector4::zero(), 1.0f, 0);
 
-  mTitleFont->start();
-  char text[1024];
-  sprintf(text, "FPS:%d", Game::getFrameRate());
-  mTitleFont->drawText(text, 20, 20, Vector4(1, 0, 0, 1), mTitleFont->getSize());
-  mTitleFont->finish();
-
-  // Visit all the nodes in the scene for drawing
   _scene->visit(this, &MazeBallMain::drawScene);
+
+  if(mMainMenu)
+  {
+    mMainMenu->draw();
+  }
+
+  if(mOverlay)
+  {
+    mOverlay->draw();
+  }
 }
 
 bool MazeBallMain::drawScene(Node* node)
@@ -86,6 +101,24 @@ void MazeBallMain::keyEvent(Keyboard::KeyEvent evt, int key)
       break;
     }
   }
+
+  if(evt == Keyboard::KEY_RELEASE)
+  {
+    switch(key)
+    {
+    case Keyboard::KEY_F5:
+      if(mMainMenu)
+      {
+        mMainMenu->reload();
+      }
+      if(mOverlay)
+      {
+        mOverlay->reload();
+      }
+      break;
+    }
+
+  }
 }
 
 void MazeBallMain::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
@@ -99,4 +132,14 @@ void MazeBallMain::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int 
   case Touch::TOUCH_MOVE:
     break;
   };
+}
+
+void MazeBallMain::MainMenuExit()
+{
+  SAFE_DELETE(mMainMenu);
+}
+
+void MazeBallMain::MainMenuPlay()
+{
+
 }

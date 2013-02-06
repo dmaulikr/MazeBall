@@ -3,15 +3,20 @@
 
 #include "gameplay.h"
 #include "LeapManager.h"
+#include "MainMenu.h"
+#include "LeapOverlay.h"
 
 using namespace gameplay;
 
-class MazeBallMain: public Game
+class MazeBallMain: public Game, public MainMenuController
 {
 public:
   MazeBallMain();
 	void keyEvent(Keyboard::KeyEvent evt, int key);
   void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
+  void MainMenuExit();
+  void MainMenuPlay();
+
 protected:
   void initialize();
   void finalize();
@@ -21,9 +26,9 @@ private:
   bool drawScene(Node* node);
   Scene* _scene;
 
-  Font* mTitleFont;
-
-  LeapManager leap; // The one and only instance of the leap manager.
+  MainMenu*     mMainMenu;
+  LeapOverlay*  mOverlay;
+  LeapManager   leap; // The one and only instance of the leap manager.
 };
 
 #endif

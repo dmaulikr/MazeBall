@@ -164,8 +164,8 @@
       <AdditionalLibraryDirectories>../../GamePlay/external-deps/lua/lib/windows/x86;../../GamePlay/external-deps/bullet/lib/windows/x86;../../GamePlay/external-deps/openal/lib/windows/x86;../../GamePlay/external-deps/oggvorbis/lib/windows/x86;../../GamePlay/external-deps/glew/lib/windows/x86;../../GamePlay/external-deps/libpng/lib/windows/x86;../../GamePlay/external-deps/zlib/lib/windows/x86;../../GamePlay/gameplay/windows/x86/$(Configuration);$(LeapDir)/lib/x86</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>copy $(SolutionDir)..\Leap_SDK_win\lib\x86\leap.dll  $(SolutionDir)$(Configuration)\
+copy $(SolutionDir)..\3rdParty\OpenAL32.dll  $(SolutionDir)$(Configuration)\</Command>
     </PostBuildEvent>
     <CustomBuildStep>
       <Command>
@@ -226,8 +226,8 @@
       <AdditionalLibraryDirectories>../../GamePlay/external-deps/lua/lib/windows/x86;../../GamePlay/external-deps/bullet/lib/windows/x86;../../GamePlay/external-deps/openal/lib/windows/x86;../../GamePlay/external-deps/oggvorbis/lib/windows/x86;../../GamePlay/external-deps/glew/lib/windows/x86;../../GamePlay/external-deps/libpng/lib/windows/x86;../../GamePlay/external-deps/zlib/lib/windows/x86;../../GamePlay/gameplay/windows/x86/$(Configuration);$(LeapDir)/lib/x86</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>copy $(SolutionDir)..\Leap_SDK_win\lib\x86\leap.dll  $(SolutionDir)$(Configuration)\
+copy $(SolutionDir)..\3rdParty\OpenAL32.dll  $(SolutionDir)$(Configuration)\</Command>
     </PostBuildEvent>
     <CustomBuildStep>
       <Command>
@@ -290,8 +290,8 @@
       <AdditionalLibraryDirectories>../../GamePlay/external-deps/lua/lib/windows/x86;../../GamePlay/external-deps/bullet/lib/windows/x86;../../GamePlay/external-deps/openal/lib/windows/x86;../../GamePlay/external-deps/oggvorbis/lib/windows/x86;../../GamePlay/external-deps/glew/lib/windows/x86;../../GamePlay/external-deps/libpng/lib/windows/x86;../../GamePlay/external-deps/zlib/lib/windows/x86;../../GamePlay/gameplay/windows/x86/$(Configuration);$(LeapDir)/lib/x86</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>copy $(SolutionDir)..\Leap_SDK_win\lib\x86\leap.dll  $(SolutionDir)$(Configuration)\
+copy $(SolutionDir)..\3rdParty\OpenAL32.dll  $(SolutionDir)$(Configuration)\</Command>
     </PostBuildEvent>
     <CustomBuildStep>
       <Command>
@@ -351,10 +351,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\LeapManager.cpp" />
+    <ClCompile Include="src\LeapOverlay.cpp" />
+    <ClCompile Include="src\MainMenu.cpp" />
     <ClCompile Include="src\MazeBallMain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\LeapManager.h" />
+    <ClInclude Include="src\LeapOverlay.h" />
+    <ClInclude Include="src\MainMenu.h" />
     <ClInclude Include="src\MazeBallMain.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

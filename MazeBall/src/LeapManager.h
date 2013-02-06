@@ -48,7 +48,6 @@ public:
   
   void update();
 
-  
 private:
   static LeapManager* stackInstance;
   

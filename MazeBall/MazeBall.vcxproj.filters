@@ -5,6 +5,9 @@
     </Filter>
     <Filter Include="src">
     </Filter>
+    <Filter Include="src\UI">
+      <UniqueIdentifier>{0fb2e124-ab45-4501-b9dc-717a903604d6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="game.config" />
@@ -34,6 +37,12 @@
     <ClInclude Include="src\LeapManager.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\LeapOverlay.h">
+      <Filter>src\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MainMenu.h">
+      <Filter>src\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\MazeBallMain.cpp">
@@ -41,6 +50,12 @@
     </ClCompile>
     <ClCompile Include="src\LeapManager.cpp">
       <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LeapOverlay.cpp">
+      <Filter>src\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MainMenu.cpp">
+      <Filter>src\UI</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

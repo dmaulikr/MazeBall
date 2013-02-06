@@ -1,0 +1,51 @@
+form MainMenuForm
+{
+  theme = res/themes/MainMenu.theme
+  autoWidth = true
+  autoHeight = true
+  position = 0, 0
+  container TitleContainer
+  {
+    style = basic
+    position = 0, 0
+    size = 260, 420
+    label Title
+    {
+      style = title
+      text = Maze Ball
+      size = 110, 30
+      alignment = ALIGN_HCENTER
+    }  
+
+    button PlayButton
+    {
+      style = buttonStyle
+      size = 160, 30
+      position = 0, 30
+      text = Play Game
+      alignment = ALIGN_HCENTER
+    }
+
+    button ExitButton
+    {
+      style = buttonStyle
+      size = 160, 30
+      position = 0, 60
+      text = Exit
+      alignment = ALIGN_HCENTER
+    }
+  }
+  container SocialContainer
+  {
+    style = basic
+    position = 0, 420
+    size = 260, 50
+    label Title
+    {
+      style = title
+      text = (Coming Soon)
+      size = 170, 30
+      alignment = ALIGN_HCENTER
+    } 
+  }
+}
