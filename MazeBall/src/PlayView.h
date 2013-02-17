@@ -13,14 +13,19 @@ using namespace gameplay;
 
 struct Cell
 {
+  enum Directions
+  {
+    N, S, E, W
+  };
+  
   Cell(int x, int y)
   {
-    memset(this, 0, sizeof(Cell));
     this->x = x;
     this->y = y;
     northWall = true;
     eastWall = true;
     visited = false;
+    north = south = east = west = NULL;
   }
   
   void link(std::vector< std::vector<Cell*> >& cells)
@@ -42,18 +47,6 @@ struct Cell
       north = cells[x][y+1];
     }
   }
-  
-  enum Directions
-  {
-    N = 0,
-    S,
-    E,
-    W
-  };
-  Cell* north;
-  Cell* south;
-  Cell* east;
-  Cell* west;
 
   bool hasWall(Directions dir)
   {
@@ -79,27 +72,27 @@ struct Cell
     else if(dir == W && west)
       west->eastWall = false;
   }
-
   
-  struct CellDirPair
+  Cell* getNeighbor(Directions dir)
   {
-    Cell* c;
-    Cell::Directions dir;
-  };
-  
+    switch (dir) {
+      case N: return north;
+      case S: return south;
+      case E: return east;
+      case W: return west;
+      default: return NULL;
+    }
+  }
+
   void solve()
   {
     visited = true;
     
-    CellDirPair n[4];
-    n[0].dir = Cell::N;
-    n[0].c = north;
-    n[1].dir = Cell::S;
-    n[1].c = south;
-    n[2].dir = Cell::E;
-    n[2].c = east;
-    n[3].dir = Cell::W;
-    n[3].c = west;
+    Directions directions[4];
+    directions[0] = N;
+    directions[1] = S;
+    directions[2] = E;
+    directions[3] = W;
     
     int swaps = 4;
     
@@ -107,32 +100,24 @@ struct Cell
     {
       int k = rand()%4;
       --swaps;
-      CellDirPair t;
-      t.dir = n[swaps].dir;
-      t.c = n[swaps].c;
-      n[swaps].dir = n[k].dir;
-      n[swaps].c = n[k].c;
-      n[k].dir = t.dir;
-      n[k].c = t.c;
+      std::swap(directions[swaps], directions[k]);
     }
     
     for(int i = 0; i < 4; i++)
     {
-      if(n[i].c && n[i].c->visited == false)
+      if(getNeighbor(directions[i]) && getNeighbor(directions[i])->visited == false)
       {
-        breakDown(n[i].dir);
-        n[i].c->solve();
+        breakDown(directions[i]);
+        getNeighbor(directions[i])->solve();
       }
     }
     
   }
   
-  // Let's only be responsible for two walls, our neighbours can take responsibility for our other two.
-  bool northWall;
-  bool eastWall;
-  int x;
-  int y;
-  bool visited;
+  bool northWall, eastWall;
+  int x, y; // Used in linking neighbours.
+  bool visited; // Used in DFS generation.
+  Cell* north, *south, *east, *west; // Neighbours
 };
 
 class PlayView : public GameNode
