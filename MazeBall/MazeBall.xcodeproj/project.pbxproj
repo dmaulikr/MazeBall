@@ -26,6 +26,10 @@
 		42C9331F1491A67F0098216A /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C9331E1491A67F0098216A /* OpenAL.framework */; };
 		42C9332F1491A78D0098216A /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C9332D1491A7810098216A /* libz.dylib */; };
 		81920D0D16B8B92100060057 /* LeapManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81920D0B16B8B92100060057 /* LeapManager.cpp */; };
+		81A765D616C6B69B0051F078 /* LeapOverlay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81A765D216C6B69B0051F078 /* LeapOverlay.cpp */; };
+		81A765D716C6B69B0051F078 /* MainMenu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81A765D416C6B69B0051F078 /* MainMenu.cpp */; };
+		81A765DA16C6BB200051F078 /* GameNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81A765D816C6BB200051F078 /* GameNode.cpp */; };
+		81A765DD16D06F290051F078 /* PlayView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81A765DB16D06F290051F078 /* PlayView.cpp */; };
 		81F9D5A616B8B7BA00F01E6B /* libLeap.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 81F9D5A516B8B7BA00F01E6B /* libLeap.dylib */; };
 /* End PBXBuildFile section */
 
@@ -89,6 +93,14 @@
 		5BC4E849150F911D00CBE1C0 /* shaders */ = {isa = PBXFileReference; lastKnownFileType = text; name = shaders; path = ../../GamePlay/gameplay/res/shaders; sourceTree = SOURCE_ROOT; };
 		81920D0B16B8B92100060057 /* LeapManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LeapManager.cpp; sourceTree = "<group>"; };
 		81920D0C16B8B92100060057 /* LeapManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeapManager.h; sourceTree = "<group>"; };
+		81A765D216C6B69B0051F078 /* LeapOverlay.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LeapOverlay.cpp; sourceTree = "<group>"; };
+		81A765D316C6B69B0051F078 /* LeapOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeapOverlay.h; sourceTree = "<group>"; };
+		81A765D416C6B69B0051F078 /* MainMenu.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MainMenu.cpp; sourceTree = "<group>"; };
+		81A765D516C6B69B0051F078 /* MainMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainMenu.h; sourceTree = "<group>"; };
+		81A765D816C6BB200051F078 /* GameNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameNode.cpp; sourceTree = "<group>"; };
+		81A765D916C6BB200051F078 /* GameNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameNode.h; sourceTree = "<group>"; };
+		81A765DB16D06F290051F078 /* PlayView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PlayView.cpp; sourceTree = "<group>"; };
+		81A765DC16D06F290051F078 /* PlayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayView.h; sourceTree = "<group>"; };
 		81F9D5A516B8B7BA00F01E6B /* libLeap.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libLeap.dylib; path = ../Leap_SDK/lib/libLeap.dylib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -155,10 +167,18 @@
 		42C932C61491A0DB0098216A /* src */ = {
 			isa = PBXGroup;
 			children = (
+				81A765D216C6B69B0051F078 /* LeapOverlay.cpp */,
+				81A765D316C6B69B0051F078 /* LeapOverlay.h */,
+				81A765D416C6B69B0051F078 /* MainMenu.cpp */,
+				81A765D516C6B69B0051F078 /* MainMenu.h */,
 				42C932EF1491A5160098216A /* MazeBallMain.cpp */,
 				42C932F01491A5160098216A /* MazeBallMain.h */,
 				81920D0B16B8B92100060057 /* LeapManager.cpp */,
 				81920D0C16B8B92100060057 /* LeapManager.h */,
+				81A765D816C6BB200051F078 /* GameNode.cpp */,
+				81A765D916C6BB200051F078 /* GameNode.h */,
+				81A765DB16D06F290051F078 /* PlayView.cpp */,
+				81A765DC16D06F290051F078 /* PlayView.h */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -353,6 +373,10 @@
 			files = (
 				42C932F11491A5160098216A /* MazeBallMain.cpp in Sources */,
 				81920D0D16B8B92100060057 /* LeapManager.cpp in Sources */,
+				81A765D616C6B69B0051F078 /* LeapOverlay.cpp in Sources */,
+				81A765D716C6B69B0051F078 /* MainMenu.cpp in Sources */,
+				81A765DA16C6BB200051F078 /* GameNode.cpp in Sources */,
+				81A765DD16D06F290051F078 /* PlayView.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

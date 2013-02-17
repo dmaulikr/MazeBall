@@ -2,23 +2,24 @@
 
 #include "gameplay.h"
 using namespace gameplay;
+#include "GameNode.h"
 
-class LeapOverlay
+class LeapOverlay : public GameNode
 {
 public:
-  LeapOverlay();
-  ~LeapOverlay();
+  static LeapOverlay* create();
+  virtual void update(float delta);
+  virtual void draw();
 
-  void update(float delta);
-  void draw();
-  void reload();
-
-private:
-  bool setup();
-  void initialize();
-  void finalize();
+protected:
+  virtual bool setup();
+  virtual void initialize();
+  virtual void finalize();
 
   SpriteBatch*        mFingerBatch;
   Form*               mForm;
   Container*          mOverlayContainer;
+
+  LeapOverlay();
+  ~LeapOverlay();
 };

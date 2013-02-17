@@ -5,6 +5,7 @@
 #include "LeapManager.h"
 #include "MainMenu.h"
 #include "LeapOverlay.h"
+#include "GameNode.h"
 
 using namespace gameplay;
 
@@ -25,6 +26,7 @@ protected:
 private:
   bool drawScene(Node* node);
   Scene* _scene;
+  GameNode* mRootNode;
 
   MainMenu*     mMainMenu;
   LeapOverlay*  mOverlay;

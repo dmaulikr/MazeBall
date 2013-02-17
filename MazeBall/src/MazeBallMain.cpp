@@ -1,4 +1,5 @@
 #include "MazeBallMain.h"
+#include "PlayView.h"
 
 // Declare our game instance
 MazeBallMain game;
@@ -13,81 +14,36 @@ MazeBallMain::MazeBallMain()
 
 void MazeBallMain::initialize()
 {
-  // Load game scene from file
-  Bundle* bundle = Bundle::create("res/box.gpb");
-  _scene = bundle->loadScene();
-  SAFE_RELEASE(bundle);
+  mMainMenu = MainMenu::create(this);
+  mOverlay = LeapOverlay::create();
+  mRootNode = GameNode::create("RootNode");
+  mRootNode->addChild(mOverlay);
+  mRootNode->addChild(mMainMenu);
 
-  // Set the aspect ratio for the scene's camera to match the current resolution
-  _scene->getActiveCamera()->setAspectRatio((float)getWidth() / (float)getHeight());
-
-  // Get light node
-  Node* lightNode = _scene->findNode("directionalLight");
-  Light* light = lightNode->getLight();
-
-  // Initialize box model
-  Node* boxNode = _scene->findNode("box");
-  Model* boxModel = boxNode->getModel();
-  Material* boxMaterial = boxModel->setMaterial("res/box.material");
-  boxMaterial->getParameter("u_ambientColor")->setValue(_scene->getAmbientColor());
-  boxMaterial->getParameter("u_lightColor")->setValue(light->getColor());
-  boxMaterial->getParameter("u_lightDirection")->setValue(lightNode->getForwardVectorView());
-
-  mMainMenu = new MainMenu(this);
-  mOverlay = new LeapOverlay();
 }
 
 void MazeBallMain::finalize()
 {
-  SAFE_RELEASE(_scene);
-  SAFE_DELETE(mMainMenu);
-  SAFE_DELETE(mOverlay);
+  SAFE_RELEASE(mRootNode);
 }
 
 void MazeBallMain::update(float elapsedTime)
 {
   leap.update();
 
-  if(mMainMenu)
-  {
-    mMainMenu->update(elapsedTime);
-  }
+  mRootNode->update(elapsedTime);
 
   if(mOverlay)
   {
     mOverlay->update(elapsedTime);
   }
-
-  _scene->findNode("box")->rotateY(MATH_DEG_TO_RAD((float)elapsedTime / 1000.0f * 180.0f));
 }
 
 void MazeBallMain::render(float elapsedTime)
 {
   // Clear the color and depth buffers
-  clear(CLEAR_COLOR_DEPTH, Vector4::zero(), 1.0f, 0);
-
-  _scene->visit(this, &MazeBallMain::drawScene);
-
-  if(mMainMenu)
-  {
-    mMainMenu->draw();
-  }
-
-  if(mOverlay)
-  {
-    mOverlay->draw();
-  }
-}
-
-bool MazeBallMain::drawScene(Node* node)
-{
-  // If the node visited contains a model, draw it
-  Model* model = node->getModel(); 
-  if (model)
-  {
-    model->draw();
-  }
-  return true;
+  clear(CLEAR_COLOR_DEPTH, Vector4(100.0f/255.0f, 149.0f/255.0f, 237.0f/255.0f, 1), 1.0f, 0);
+  mRootNode->draw();
 }
 
 void MazeBallMain::keyEvent(Keyboard::KeyEvent evt, int key)
@@ -107,14 +63,7 @@ void MazeBallMain::keyEvent(Keyboard::KeyEvent evt, int key)
     switch(key)
     {
     case Keyboard::KEY_F5:
-      if(mMainMenu)
-      {
-        mMainMenu->reload();
-      }
-      if(mOverlay)
-      {
-        mOverlay->reload();
-      }
+      mRootNode->reload();
       break;
     }
 
@@ -136,10 +85,19 @@ void MazeBallMain::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int 
 
 void MazeBallMain::MainMenuExit()
 {
-  SAFE_DELETE(mMainMenu);
+  exit();
 }
 
 void MazeBallMain::MainMenuPlay()
 {
-
+  if(mMainMenu) // Shouldn't be a problem, but we'll check just in case.
+  {
+    mRootNode->removeChild(mMainMenu);
+    mMainMenu = NULL;
+  }
+  PlayView* playView = PlayView::create();
+  if(playView)
+  {
+    mRootNode->addChild(playView);
+  }
 }

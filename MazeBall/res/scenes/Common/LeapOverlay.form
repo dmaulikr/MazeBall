@@ -12,7 +12,7 @@ form LeapOverlayForm
     label Title
     {
       style = basicSmall
-      text = Hover to hide
+      text = This box does nothing yet.
       size = 500, 60
       position = 0, 0
       alignment = ALIGN_LEFT

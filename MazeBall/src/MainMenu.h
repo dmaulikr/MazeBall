@@ -2,6 +2,7 @@
 
 #include "gameplay.h"
 using namespace gameplay;
+#include "GameNode.h"
 
 class MainMenuController
 {
@@ -10,16 +11,15 @@ public:
   virtual void MainMenuPlay() = 0;
 };
 
-class MainMenu
+class MainMenu: public Control::Listener, public GameNode
 {
 public:
-  MainMenu(MainMenuController* controller);
-  ~MainMenu(void);
-
-  void update(float delta);
-  void draw();
-  void reload();
-
+  static MainMenu* create(MainMenuController* controller);
+  virtual void update(float delta);
+  virtual void draw();
+  
+  // Handle events coming back from the main form.
+  void controlEvent(Control* control, EventType evt);
 private:
   bool setup();
   void initialize();
@@ -28,4 +28,10 @@ private:
   MainMenuController* mController;
   Form*               mForm;
   Container*          mTitleContainer;
+  Button*             mPlayButton;
+  Button*             mExitButton;
+  
+  MainMenu(MainMenuController* controller);
+protected:
+  ~MainMenu(void);
 };
