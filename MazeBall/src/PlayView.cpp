@@ -40,8 +40,9 @@ bool PlayView::setup()
     
     mScene->getActiveCamera()->setAspectRatio((float)Game::getInstance()->getWidth() / (float)Game::getInstance()->getHeight());
     mScene->getActiveCamera()->getNode()->setRotation(Matrix::identity());
+    mScene->getActiveCamera()->setFarPlane(250);
 
-    mScene->getActiveCamera()->getNode()->setTranslation(0, 0, 35);
+    mScene->getActiveCamera()->getNode()->setTranslation(0, 0, 200);
     
     Node* lightNode = mScene->findNode("directionalLight");
     BREAK_IF(!lightNode);
@@ -68,7 +69,7 @@ bool PlayView::setup()
 
 void PlayView::initialize()
 {
-  int w = 15, h = 15;
+  int w = 150, h = 150;
   for(size_t i = 0; i < w; ++i)
   {
     mMaze.push_back( std::vector<Cell*>() );
@@ -100,10 +101,11 @@ void PlayView::draw()
   float startx = -((float)mMaze.size() / 2.0f) + 0.5f;
   float starty = -((float)mMaze[0].size() / 2.0f) + 0.5f;
   mCube->getNode()->setScale(0.8f);
+  float thickness = 0.2f;
   for(int x = 0; x < mMaze.size(); ++x)
   {
     mCube->getNode()->setScaleX(1.0f);
-    mCube->getNode()->setScaleY(0.05f);
+    mCube->getNode()->setScaleY(thickness);
     mCube->getNode()->setTranslationX(startx + (float)x);
     mCube->getNode()->setTranslationY(starty - 0.5f);
     mScene->visit(this, &PlayView::drawScene);
@@ -112,7 +114,7 @@ void PlayView::draw()
     {
       if(x == 0)
       {
-        mCube->getNode()->setScaleX(0.05f);
+        mCube->getNode()->setScaleX(thickness);
         mCube->getNode()->setScaleY(1.0f);
         mCube->getNode()->setTranslationX(startx - 0.5f);
         mCube->getNode()->setTranslationY(starty + (float)y);
@@ -121,14 +123,14 @@ void PlayView::draw()
       if(mMaze[x][y]->hasWall(Cell::N))
       {
         mCube->getNode()->setScaleX(1.0f);
-        mCube->getNode()->setScaleY(0.05f);
+        mCube->getNode()->setScaleY(thickness);
         mCube->getNode()->setTranslationX(startx + (float)x);
         mCube->getNode()->setTranslationY(starty + (float)y + 0.5f);
         mScene->visit(this, &PlayView::drawScene);
       }
       if(mMaze[x][y]->hasWall(Cell::E))
       {
-        mCube->getNode()->setScaleX(0.05f);
+        mCube->getNode()->setScaleX(thickness);
         mCube->getNode()->setScaleY(1.0f);
         mCube->getNode()->setTranslationX(startx + (float)x + 0.5f);
         mCube->getNode()->setTranslationY(starty + (float)y);
