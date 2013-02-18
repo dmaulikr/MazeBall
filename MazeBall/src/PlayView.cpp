@@ -42,7 +42,7 @@ bool PlayView::setup()
     mScene->getActiveCamera()->getNode()->setRotation(Matrix::identity());
     mScene->getActiveCamera()->setFarPlane(250);
 
-    mScene->getActiveCamera()->getNode()->setTranslation(0, 0, 200);
+    mScene->getActiveCamera()->getNode()->setTranslation(0, 0, 120);
     
     Node* lightNode = mScene->findNode("directionalLight");
     BREAK_IF(!lightNode);
@@ -69,7 +69,7 @@ bool PlayView::setup()
 
 void PlayView::initialize()
 {
-  int w = 150, h = 150;
+  int w = 100, h = 50;
   for(size_t i = 0; i < w; ++i)
   {
     mMaze.push_back( std::vector<Cell*>() );
@@ -87,8 +87,8 @@ void PlayView::initialize()
     }
   }
   
-  mMaze[0][0]->solve();
-  
+  mMaze[0][0]->generate();
+  Cell::reset(mMaze);
 }
 
 void PlayView::finalize()
@@ -136,6 +136,14 @@ void PlayView::draw()
         mCube->getNode()->setTranslationY(starty + (float)y);
         mScene->visit(this, &PlayView::drawScene);
       }
+      if(mMaze[x][y]->visited && mMaze[x][y]->path)
+      {
+        mCube->getNode()->setScaleX(0.5f);
+        mCube->getNode()->setScaleY(0.5f);
+        mCube->getNode()->setTranslationX(startx + (float)x);
+        mCube->getNode()->setTranslationY(starty + (float)y);
+        mScene->visit(this, &PlayView::drawScene);
+      }
     }
   }
 
@@ -143,6 +151,7 @@ void PlayView::draw()
 
 void PlayView::update(float delta)
 {
+  mMaze[0][0]->solve(mMaze[mMaze.size()-1][mMaze[0].size()-1]);
 }
 
 bool PlayView::drawScene(Node* node)

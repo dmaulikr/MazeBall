@@ -30,22 +30,10 @@ struct Cell
   
   void link(std::vector< std::vector<Cell*> >& cells)
   {
-    if(x > 0)
-    {
-      west = cells[x-1][y];
-    }
-    if(x < cells.size()-1)
-    {
-      east = cells[x+1][y];
-    }
-    if(y > 0)
-    {
-      south = cells[x][y-1];
-    }
-    if(y < cells.size()-1)
-    {
-      north = cells[x][y+1];
-    }
+    west = x > 0 ? cells[x-1][y]:NULL;
+    east = x < cells.size()-1?cells[x+1][y]:NULL;
+    south = y > 0 ? cells[x][y-1] : NULL;
+    north = y < cells[0].size()-1 ? cells[x][y+1] : NULL;
   }
 
   bool hasWall(Directions dir)
@@ -105,6 +93,17 @@ struct Cell
     }
   }
 
+  static void reset(std::vector< std::vector<Cell*> > & maze)
+  {
+    for(int i = 0; i < maze.size(); ++i)
+    {
+      for(int j = 0; j < maze[i].size(); ++j)
+      {
+        maze[i][j]->visited = false;
+        maze[i][j]->path = false;
+      }
+    }
+  }
   
   //
   // So here's how we're solving mazes.
@@ -115,7 +114,7 @@ struct Cell
   // If no neighbors were looked at we can just get rid of the current node.
   // Once there are no nodes left in the stack we return, the maze is now generated.
   //
-  void solve()
+  void generate()
   {
     std::stack< std::pair<Cell*, Compass> > stack;
     Compass directions;
@@ -146,9 +145,84 @@ struct Cell
     } while (stack.size() > 0);
   }
   
+  void solve(Cell* end)
+  {
+    static std::stack<Cell*> stack;
+    Compass compass;
+    if(stack.size() == 0)
+    {
+      stack.push(this);
+    }
+    compass.directions[0] = N;
+    compass.directions[1] = S;
+    compass.directions[2] = E;
+    compass.directions[3] = W;
+    do {
+      Cell* current = stack.top();
+      current->visited = true;
+      current->path = true;
+      
+      if(current == end)
+      {
+        while(stack.size())
+        {
+          stack.pop();
+        }
+        return;
+      }
+      
+      bool isDone = true;
+      for(int i = 0; i < 4; ++i)
+      {
+        switch(compass.directions[i])
+        {
+          case N:
+            if(!current->northWall && current->getNeighbor(compass.directions[i]) && !current->getNeighbor(compass.directions[i])->visited)
+            {
+              isDone = false;
+            }
+            break;
+          case S:
+            if(current->getNeighbor(compass.directions[i]) && !current->getNeighbor(compass.directions[i])->visited && !current->getNeighbor(compass.directions[i])->northWall)
+            {
+              isDone = false;
+            }
+            break;
+          case E:
+            if(!current->eastWall && current->getNeighbor(compass.directions[i]) && !current->getNeighbor(compass.directions[i])->visited)
+            {
+              isDone = false;
+            }
+            break;
+          case W:
+            if(current->getNeighbor(compass.directions[i]) && !current->getNeighbor(compass.directions[i])->visited && !current->getNeighbor(compass.directions[i])->eastWall)
+            {
+              isDone = false;
+            }
+            break;
+        }
+        if(!isDone)
+        {
+          stack.push(current->getNeighbor(compass.directions[i]));
+          return;
+        }
+      }
+      
+      if(isDone)
+      {
+        current->path = false;
+        stack.pop();
+        return;
+      }
+      
+    } while(stack.size() > 0);
+    
+  }
+  
   bool northWall, eastWall;
   int x, y; // Used in linking neighbours.
   bool visited; // Used in DFS generation.
+  bool path; // Part of the path to the finish?
   Cell* north, *south, *east, *west; // Neighbours
 };
 
