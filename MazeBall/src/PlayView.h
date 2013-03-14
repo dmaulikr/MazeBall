@@ -31,9 +31,9 @@ struct Cell
   void link(std::vector< std::vector<Cell*> >& cells)
   {
     west = x > 0 ? cells[x-1][y]:NULL;
-    east = x < cells.size()-1?cells[x+1][y]:NULL;
+    east = x < (int)cells.size()-1?cells[x+1][y]:NULL;
     south = y > 0 ? cells[x][y-1] : NULL;
-    north = y < cells[0].size()-1 ? cells[x][y+1] : NULL;
+    north = y < (int)cells[0].size()-1 ? cells[x][y+1] : NULL;
   }
 
   bool hasWall(Directions dir)
@@ -95,9 +95,9 @@ struct Cell
 
   static void reset(std::vector< std::vector<Cell*> > & maze)
   {
-    for(int i = 0; i < maze.size(); ++i)
+    for(int i = 0; i < (int)maze.size(); ++i)
     {
-      for(int j = 0; j < maze[i].size(); ++j)
+      for(int j = 0; j < (int)maze[i].size(); ++j)
       {
         maze[i][j]->visited = false;
         maze[i][j]->path = false;
@@ -241,7 +241,7 @@ protected:
   bool drawScene(Node* node);
   
   Scene* mScene;
-  Model* mCube;
+  Model* mWallNE, *mWallE, *mWallN, *mFloor;
   Light* mLight;
   Node* mCamera;
   

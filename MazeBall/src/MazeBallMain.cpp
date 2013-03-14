@@ -9,7 +9,6 @@ MazeBallMain::MazeBallMain()
   mMainMenu(NULL),
   mOverlay(NULL)
 {
-
 }
 
 void MazeBallMain::initialize()
@@ -42,7 +41,14 @@ void MazeBallMain::update(float elapsedTime)
 void MazeBallMain::render(float elapsedTime)
 {
   // Clear the color and depth buffers
-  clear(CLEAR_COLOR_DEPTH, Vector4(100.0f/255.0f, 149.0f/255.0f, 237.0f/255.0f, 1), 1.0f, 0);
+  const Vector4 easyColors[] = {
+    Vector4(1, 1, 1, 1), // while
+    Vector4(0.1f, 0.11f, 0.12f, 1), // cool
+    Vector4(0, 0, 0, 1), // black
+    Vector4(100.0f/255.0f, 149.0f/255.0f, 237.0f/255.0f, 1) // cornflower blue
+  };
+
+  clear(CLEAR_COLOR_DEPTH, easyColors[1], 1.0f, 0);
   mRootNode->draw();
 }
 

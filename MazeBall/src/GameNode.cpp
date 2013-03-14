@@ -7,9 +7,8 @@
 //
 
 #include "GameNode.h"
-#include <iostream.h>
+#include <iostream>
 using namespace std;
-
 
 GameNode* GameNode::create(const char* id)
 {

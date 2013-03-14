@@ -350,16 +350,20 @@ copy $(SolutionDir)..\3rdParty\OpenAL32.dll  $(SolutionDir)$(Configuration)\</Co
     <None Include="res\colored.vert" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\GameNode.cpp" />
     <ClCompile Include="src\LeapManager.cpp" />
     <ClCompile Include="src\LeapOverlay.cpp" />
     <ClCompile Include="src\MainMenu.cpp" />
     <ClCompile Include="src\MazeBallMain.cpp" />
+    <ClCompile Include="src\PlayView.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\GameNode.h" />
     <ClInclude Include="src\LeapManager.h" />
     <ClInclude Include="src\LeapOverlay.h" />
     <ClInclude Include="src\MainMenu.h" />
     <ClInclude Include="src\MazeBallMain.h" />
+    <ClInclude Include="src\PlayView.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

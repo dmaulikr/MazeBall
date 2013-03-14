@@ -1,13 +1,15 @@
 #include "PlayView.h"
 #include <iostream>
+#include <Windows.h>
 using namespace std;
 
 #define BREAK_IF(condition) if(condition){break;}
+#define DEG_TO_RAD(deg) ((deg) * 0.0174532925f)
 
 PlayView::PlayView(): GameNode("PlayView")
 {
   mScene = NULL;
-  mCube = NULL;
+  mWallNE = NULL;
   mLight = NULL;
   mCamera = NULL;
 }
@@ -31,35 +33,57 @@ PlayView* PlayView::create()
 
 bool PlayView::setup()
 {
-  do {
-    Bundle* bundle = Bundle::create("res/box.gpb");
+  do 
+  {
+    // Each tile is 100x100x100
+    const float cameraDistance = 1500.0f;
+    
+    Bundle* bundle = Bundle::create("res/MazeBits.gpb");
     BREAK_IF(!bundle);
     mScene = bundle->loadScene();
-    BREAK_IF(!bundle);
+    BREAK_IF(!mScene);
     SAFE_RELEASE(bundle);
-    
+
     mScene->getActiveCamera()->setAspectRatio((float)Game::getInstance()->getWidth() / (float)Game::getInstance()->getHeight());
     mScene->getActiveCamera()->getNode()->setRotation(Matrix::identity());
-    mScene->getActiveCamera()->setFarPlane(250);
+    mScene->getActiveCamera()->setFarPlane(cameraDistance * 2.0f);
+    mScene->getActiveCamera()->getNode()->setTranslation(0, -900.0f, cameraDistance);
 
-    mScene->getActiveCamera()->getNode()->setTranslation(0, 0, 120);
-    
-    Node* lightNode = mScene->findNode("directionalLight");
-    BREAK_IF(!lightNode);
-    mLight = lightNode->getLight();
-    BREAK_IF(!mLight);
+    mScene->getActiveCamera()->getNode()->rotateX(DEG_TO_RAD(30.0f));
 
-    Node* boxNode = mScene->findNode("box");
-    BREAK_IF(!boxNode);
-    mCube = boxNode->getModel();
-    BREAK_IF(!mCube);
-    
-    Material* boxMaterial = mCube->setMaterial("res/box.material");
-    BREAK_IF(!boxMaterial);
-    boxMaterial->getParameter("u_ambientColor")->setValue(mScene->getAmbientColor());
-    boxMaterial->getParameter("u_lightColor")->setValue(mLight->getColor());
-    boxMaterial->getParameter("u_lightDirection")->setValue(lightNode->getForwardVectorView());
-    
+    Node* node = mScene->findNode("north_east_simple");
+#define WALL_MODEL_COUNT 4
+    Model** models[WALL_MODEL_COUNT] = { 
+      &mWallNE, 
+      &mWallN, 
+      &mWallE,
+      &mFloor};
+
+    const char* modelNames[WALL_MODEL_COUNT] = { 
+      "north_east_simple", 
+      "north_simple", 
+      "east_simple",
+      "blank_simple"};
+
+    for(int i = 0; i < WALL_MODEL_COUNT; ++i)
+    {
+      Node* node = mScene->findNode(modelNames[i]);
+      BREAK_IF(!node);
+      *models[i] = node->getModel();
+      BREAK_IF(!*models[i]);
+
+      Material* boxMaterial = (*models[i])->setMaterial("res/box.material");
+      BREAK_IF(!boxMaterial);
+      boxMaterial->getParameter("u_ambientColor")->setValue(mScene->getAmbientColor());
+      boxMaterial->getParameter("u_lightColor")->setValue(Vector3(1, 1, 1));
+      boxMaterial->getParameter("u_lightDirection")->setValue(Vector3(0, 0, -1));
+
+      node->setTranslation(Vector3::zero());
+      node->setScale(Vector3::one());
+      //node->rotateX(DEG_TO_RAD(90));
+      node->rotateY(DEG_TO_RAD(-90));
+    }
+
     return true;
 
   } while (false);
@@ -69,7 +93,7 @@ bool PlayView::setup()
 
 void PlayView::initialize()
 {
-  int w = 100, h = 50;
+  size_t w = 10, h = 10;
   for(size_t i = 0; i < w; ++i)
   {
     mMaze.push_back( std::vector<Cell*>() );
@@ -78,7 +102,7 @@ void PlayView::initialize()
       mMaze[i].push_back(new Cell(i, j));
     }
   }
-  
+
   for(size_t i = 0; i < mMaze.size(); ++i)
   {
     for(size_t j = 0; j < mMaze[i].size(); ++j)
@@ -86,80 +110,99 @@ void PlayView::initialize()
       mMaze[i][j]->link(mMaze);
     }
   }
-  
+
   mMaze[0][0]->generate();
   Cell::reset(mMaze);
 }
 
 void PlayView::finalize()
 {
-  
+
 }
 
 void PlayView::draw()
 {
-  float startx = -((float)mMaze.size() / 2.0f) + 0.5f;
-  float starty = -((float)mMaze[0].size() / 2.0f) + 0.5f;
-  mCube->getNode()->setScale(0.8f);
-  float thickness = 0.2f;
-  for(int x = 0; x < mMaze.size(); ++x)
-  {
-    mCube->getNode()->setScaleX(1.0f);
-    mCube->getNode()->setScaleY(thickness);
-    mCube->getNode()->setTranslationX(startx + (float)x);
-    mCube->getNode()->setTranslationY(starty - 0.5f);
-    mScene->visit(this, &PlayView::drawScene);
-    
-    for(int y = 0; y < mMaze[x].size(); ++y)
-    {
-      if(x == 0)
-      {
-        mCube->getNode()->setScaleX(thickness);
-        mCube->getNode()->setScaleY(1.0f);
-        mCube->getNode()->setTranslationX(startx - 0.5f);
-        mCube->getNode()->setTranslationY(starty + (float)y);
-        mScene->visit(this, &PlayView::drawScene);
-      }
-      if(mMaze[x][y]->hasWall(Cell::N))
-      {
-        mCube->getNode()->setScaleX(1.0f);
-        mCube->getNode()->setScaleY(thickness);
-        mCube->getNode()->setTranslationX(startx + (float)x);
-        mCube->getNode()->setTranslationY(starty + (float)y + 0.5f);
-        mScene->visit(this, &PlayView::drawScene);
-      }
-      if(mMaze[x][y]->hasWall(Cell::E))
-      {
-        mCube->getNode()->setScaleX(thickness);
-        mCube->getNode()->setScaleY(1.0f);
-        mCube->getNode()->setTranslationX(startx + (float)x + 0.5f);
-        mCube->getNode()->setTranslationY(starty + (float)y);
-        mScene->visit(this, &PlayView::drawScene);
-      }
-      if(mMaze[x][y]->visited && mMaze[x][y]->path)
-      {
-        mCube->getNode()->setScaleX(0.5f);
-        mCube->getNode()->setScaleY(0.5f);
-        mCube->getNode()->setTranslationX(startx + (float)x);
-        mCube->getNode()->setTranslationY(starty + (float)y);
-        mScene->visit(this, &PlayView::drawScene);
-      }
-    }
-  }
-
+  mScene->visit(this, &PlayView::drawScene);
 }
 
 void PlayView::update(float delta)
 {
-  mMaze[0][0]->solve(mMaze[mMaze.size()-1][mMaze[0].size()-1]);
+  //mCube->getNode()->rotate(Vector3(0,1,0), DEG_TO_RAD(delta)*0.5f);
+  //mMaze[0][0]->solve(mMaze[mMaze.size()-1][mMaze[0].size()-1]);
 }
 
 bool PlayView::drawScene(Node* node)
 {
-  Model* model = node->getModel();
-  if (model)
+  
+  const float scale = 100.0f;
+  
+  float startx = scale*-(((float)mMaze.size()/2.0f));
+  float starty = scale*-(((float)mMaze[0].size()/2.0f)-0.5f);
+
+  
+  Model* model = node ? node->getModel() : NULL;
+
+  if(model == mWallNE)
   {
-    model->draw();
+    for(int ix = 0; ix < (int)mMaze.size(); ++ix)
+    {
+      for(int iy = 0; iy < (int)mMaze[ix].size(); ++iy)
+      {
+        if(mMaze[ix][iy]->hasWall(Cell::N) && mMaze[ix][iy]->hasWall(Cell::E))
+        {
+          node->setTranslationX((startx)+((float)ix) * scale);
+          node->setTranslationY((starty)+((float)iy) * scale);
+          model->draw();
+        }
+      }
+    }
   }
+  else if(model == mWallN)
+  {
+    for(int ix = 0; ix < (int)mMaze.size(); ++ix)
+    {
+      for(int iy = 0; iy < (int)mMaze[ix].size(); ++iy)
+      {
+        if(mMaze[ix][iy]->hasWall(Cell::N) && !mMaze[ix][iy]->hasWall(Cell::E))
+        {
+          node->setTranslationX((startx)+((float)ix) * scale);
+          node->setTranslationY((starty)+((float)iy) * scale);
+          model->draw();
+        }
+      }
+    }
+  }
+  else if(model == mWallE) 
+  {
+    for(int ix = 0; ix < (int)mMaze.size(); ++ix)
+    {
+      for(int iy = 0; iy < (int)mMaze[ix].size(); ++iy)
+      {
+        if(!mMaze[ix][iy]->hasWall(Cell::N) && mMaze[ix][iy]->hasWall(Cell::E))
+        {
+          node->setTranslationX((startx)+((float)ix) * scale);
+          node->setTranslationY((starty)+((float)iy) * scale);
+          model->draw();
+        }
+      }
+    }
+  }
+  else if(model == mFloor)
+  {
+    for(int ix = 0; ix < (int)mMaze.size(); ++ix)
+    {
+      for(int iy = 0; iy < (int)mMaze[ix].size(); ++iy)
+      {
+        if(!mMaze[ix][iy]->hasWall(Cell::N) && !mMaze[ix][iy]->hasWall(Cell::E))
+        {
+          node->setTranslationX((startx)+((float)ix) * scale);
+          node->setTranslationY((starty)+((float)iy) * scale);
+          model->draw();
+        }
+      }
+    }
+  }
+  
+
   return true;
 }

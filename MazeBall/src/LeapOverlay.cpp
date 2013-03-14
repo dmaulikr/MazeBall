@@ -18,7 +18,7 @@ LeapOverlay* LeapOverlay::create()
   return NULL;
 }
 
-LeapOverlay::LeapOverlay() : GameNode("LeapOverlay")
+LeapOverlay::LeapOverlay() : GameNode("LeapOverlay"), mForm(NULL)
 {
 }
 
@@ -26,8 +26,8 @@ bool LeapOverlay::setup()
 {
   do 
   {
-    mForm = Form::create("res/scenes/Common/LeapOverlay.form");
-    BREAK_IF(!mForm); // If the form doesn't load we're in for trouble.
+    //mForm = Form::create("res/scenes/Common/LeapOverlay.form");
+    //BREAK_IF(!mForm); // If the form doesn't load we're in for trouble.
 
     mFingerBatch = SpriteBatch::create("res/themes/editor.png", NULL, 10);
     BREAK_IF(!mFingerBatch);
@@ -43,7 +43,7 @@ LeapOverlay::~LeapOverlay()
 
 void LeapOverlay::update(float delta)
 {
-  mForm->update(delta);
+  //mForm->update(delta);
   GameNode::update(delta);
 }
 
@@ -135,7 +135,7 @@ void LeapOverlay::draw()
     mFingerBatch->finish();
   }
 
-  mForm->draw();
+  //mForm->draw();
   GameNode::draw();
 }
 

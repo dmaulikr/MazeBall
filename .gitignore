@@ -1,5 +1,19 @@
 
-.DS_Store
+*.DS_Store
+*.tlog
+*.obj
+*.exe
+*.manifest
+*.res
+*.log
+*.pdb
+*.rc
+*.idb
+*.sdf
+*.suo
+*.lastbuildstate
+*.opensdf
+*.ilk
 
 MazeBall/MazeBall.xcodeproj/xcuserdata/jthomson.xcuserdatad/xcschemes/xcschememanagement.plist
 
